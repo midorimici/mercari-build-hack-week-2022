@@ -17,8 +17,8 @@ var DbConnection *sql.DB
 
 type Post struct {
 	Name string `json:"name"`
-	Content string `json:"category"`
-	Tag string `json:"image"`
+	Content string `json:"content"`
+	Tag string `json:"tag"`
 }
 
 func addPost(c echo.Context) error {
