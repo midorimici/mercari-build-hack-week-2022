@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -13,37 +14,63 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const dbName = "mercari.sqlite3"
+
 var DbConnection *sql.DB
 
 type Post struct {
-	Name string `json:"name"`
+	Name    string `json:"name"`
 	Content string `json:"content"`
-	Tag string `json:"tags"`
+	Tags    string `json:"tags"`
 }
 
 func addPost(c echo.Context) error {
-	return c.String(http.StatusOK, "OK")
+	// Get form data
+	name := c.FormValue("name")
+	content := c.FormValue("content")
+	tags := c.FormValue("tags")
+
+	// Log
+	c.Logger().Infof("post received: %s, %s, %s", name, content, tags)
+
+	// Open DB
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		return fmt.Errorf("addPost failed: %w", err)
+	}
+	defer db.Close()
+
+	// Create a new post
+	_, err = db.Exec("INSERT INTO posts (name, content, tags) values (?, ?, ?)", name, content, tags)
+	if err != nil {
+		return fmt.Errorf("addPost failed: %w", err)
+	}
+
+	// Response data
+	message := fmt.Sprintf("post received: %s, %s, %s", name, content, tags)
+
+	return c.String(http.StatusOK, message)
 }
 
 func showPosts(c echo.Context) error {
-	DbConnection,_:=sql.Open("sqlite3","mercari.sqlite3")
+	DbConnection, _ := sql.Open("sqlite3", dbName)
 	defer DbConnection.Close()
 
-	cmd := "SELECT name,content,tag FROM post"
+	cmd := "SELECT name, content, tags FROM posts"
 	rows, err := DbConnection.Query(cmd)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	
+
 	var posts []Post
-	for rows.Next(){
+	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.Name,&post.Content,&post.Tag)
-		if err != nil{
+		err := rows.Scan(&post.Name, &post.Content, &post.Tags)
+		if err != nil {
 			log.Fatal(err)
 		}
-		posts = append(posts,post)
+		posts = append(posts, post)
 	}
 	n_json, err := json.Marshal(posts)
 	if err != nil {
