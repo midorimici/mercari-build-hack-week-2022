@@ -16,9 +16,9 @@ import (
 var DbConnection *sql.DB
 
 type Post struct {
-	Name string `json:"name"`
+	Name    string `json:"name"`
 	Content string `json:"content"`
-	Tag string `json:"tags"`
+	Tag     string `json:"tags"`
 }
 
 func addPost(c echo.Context) error {
@@ -26,7 +26,7 @@ func addPost(c echo.Context) error {
 }
 
 func showPosts(c echo.Context) error {
-	DbConnection,_:=sql.Open("sqlite3","mercari.sqlite3")
+	DbConnection, _ := sql.Open("sqlite3", "mercari.sqlite3")
 	defer DbConnection.Close()
 
 	cmd := "SELECT name,content,tag FROM post"
@@ -35,15 +35,15 @@ func showPosts(c echo.Context) error {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	
+
 	var posts []Post
-	for rows.Next(){
+	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.Name,&post.Content,&post.Tag)
-		if err != nil{
+		err := rows.Scan(&post.Name, &post.Content, &post.Tag)
+		if err != nil {
 			log.Fatal(err)
 		}
-		posts = append(posts,post)
+		posts = append(posts, post)
 	}
 	n_json, err := json.Marshal(posts)
 	if err != nil {
