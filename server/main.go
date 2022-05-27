@@ -21,7 +21,7 @@ var DbConnection *sql.DB
 type Post struct {
 	Name    string `json:"name"`
 	Content string `json:"content"`
-	Tag     string `json:"tags"`
+	Tags    string `json:"tags"`
 }
 
 func addPost(c echo.Context) error {
@@ -41,7 +41,7 @@ func addPost(c echo.Context) error {
 	defer db.Close()
 
 	// Create a new post
-	_, err = db.Exec("INSERT INTO post (name, content, tag) values (?, ?, ?)", name, content, tags)
+	_, err = db.Exec("INSERT INTO posts (name, content, tags) values (?, ?, ?)", name, content, tags)
 	if err != nil {
 		return fmt.Errorf("addPost failed: %w", err)
 	}
@@ -56,7 +56,7 @@ func showPosts(c echo.Context) error {
 	DbConnection, _ := sql.Open("sqlite3", dbName)
 	defer DbConnection.Close()
 
-	cmd := "SELECT name,content,tag FROM post"
+	cmd := "SELECT name, content, tags FROM posts"
 	rows, err := DbConnection.Query(cmd)
 	if err != nil {
 		log.Fatal(err)
@@ -66,7 +66,7 @@ func showPosts(c echo.Context) error {
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.Name, &post.Content, &post.Tag)
+		err := rows.Scan(&post.Name, &post.Content, &post.Tags)
 		if err != nil {
 			log.Fatal(err)
 		}
