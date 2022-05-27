@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -13,6 +14,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const dbName = "mercari.sqlite3"
+
 var DbConnection *sql.DB
 
 type Post struct {
@@ -22,11 +25,35 @@ type Post struct {
 }
 
 func addPost(c echo.Context) error {
-	return c.String(http.StatusOK, "OK")
+	// Get form data
+	name := c.FormValue("name")
+	content := c.FormValue("content")
+	tags := c.FormValue("tags")
+
+	// Log
+	c.Logger().Infof("post received: %s, %s, %s", name, content, tags)
+
+	// Open DB
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		return fmt.Errorf("addPost failed: %w", err)
+	}
+	defer db.Close()
+
+	// Create a new post
+	_, err = db.Exec("INSERT INTO post (name, content, tag) values (?, ?, ?)", name, content, tags)
+	if err != nil {
+		return fmt.Errorf("addPost failed: %w", err)
+	}
+
+	// Response data
+	message := fmt.Sprintf("post received: %s, %s, %s", name, content, tags)
+
+	return c.String(http.StatusOK, message)
 }
 
 func showPosts(c echo.Context) error {
-	DbConnection, _ := sql.Open("sqlite3", "mercari.sqlite3")
+	DbConnection, _ := sql.Open("sqlite3", dbName)
 	defer DbConnection.Close()
 
 	cmd := "SELECT name,content,tag FROM post"
