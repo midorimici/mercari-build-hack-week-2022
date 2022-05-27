@@ -17,15 +17,15 @@ var DbConnection *sql.DB
 
 type Post struct {
 	Name string `json:"name"`
-	Content string `json:"category"`
-	Tag string `json:"image"`
+	Content string `json:"content"`
+	Tag string `json:"tags"`
 }
 
 func addPost(c echo.Context) error {
 	return c.String(http.StatusOK, "OK")
 }
 
-func showPost(c echo.Context) error {
+func showPosts(c echo.Context) error {
 	DbConnection,_:=sql.Open("sqlite3","mercari.sqlite3")
 	defer DbConnection.Close()
 
@@ -70,9 +70,9 @@ func main() {
 	}))
 
 	// Routes
+	e.POST("/posts", addPost)
+	e.GET("/posts", showPosts)
 
 	// Start server
-	e.POST("/post", addPost)
-	e.GET("/post", showPost)
 	e.Logger.Fatal(e.Start(":9000"))
 }
