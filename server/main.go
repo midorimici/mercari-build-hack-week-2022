@@ -43,7 +43,7 @@ func addPost(c echo.Context) error {
 	defer db.Close()
 
 	// Create a new post
-	_, err = db.Exec("INSERT INTO posts (name,category, content, tags) values (?, ?, ?)", name,category, content, tags)
+	_, err = db.Exec("INSERT INTO posts (name,category, content, tags) values (?, ?,?, ?)", name,category, content, tags)
 	if err != nil {
 		return fmt.Errorf("addPost failed: %w", err)
 	}
