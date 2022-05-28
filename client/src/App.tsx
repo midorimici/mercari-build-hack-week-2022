@@ -1,6 +1,7 @@
 import './App.css';
 import { Post } from './Post';
 import { PostList } from './PostList';
+import { ReplyDialog } from './components/ReplayDialog';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Post />
         <PostList />
       </div>
+      <ReplyDialog isVisible={true} />
     </div>
   );
 }
