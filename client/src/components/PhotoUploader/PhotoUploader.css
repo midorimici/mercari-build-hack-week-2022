@@ -1,0 +1,21 @@
+.image-container {
+  cursor: pointer;
+  align-self: center;
+}
+
+.image-upload-btn {
+  color: grey;
+  border: dashed 2px grey;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  transition: background-color 0.4s;
+}
+
+.image-upload-btn:hover {
+  background-color: #ddd;
+}
