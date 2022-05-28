@@ -20,6 +20,7 @@ var DbConnection *sql.DB
 
 type Post struct {
 	Name    string `json:"name"`
+	Category    string `json:"category"`
 	Content string `json:"content"`
 	Tags    string `json:"tags"`
 }
@@ -27,11 +28,12 @@ type Post struct {
 func addPost(c echo.Context) error {
 	// Get form data
 	name := c.FormValue("name")
+	category := c.FormValue("category")
 	content := c.FormValue("content")
 	tags := c.FormValue("tags")
 
 	// Log
-	c.Logger().Infof("post received: %s, %s, %s", name, content, tags)
+	c.Logger().Infof("post received: %s,%s, %s, %s", name,category, content, tags)
 
 	// Open DB
 	db, err := sql.Open("sqlite3", dbName)
@@ -41,13 +43,13 @@ func addPost(c echo.Context) error {
 	defer db.Close()
 
 	// Create a new post
-	_, err = db.Exec("INSERT INTO posts (name, content, tags) values (?, ?, ?)", name, content, tags)
+	_, err = db.Exec("INSERT INTO posts (name,category, content, tags) values (?, ?, ?)", name,category, content, tags)
 	if err != nil {
 		return fmt.Errorf("addPost failed: %w", err)
 	}
 
 	// Response data
-	message := fmt.Sprintf("post received: %s, %s, %s", name, content, tags)
+	message := fmt.Sprintf("post received: %s,%s, %s, %s", name,category, content, tags)
 
 	return c.String(http.StatusOK, message)
 }
@@ -56,7 +58,7 @@ func showPosts(c echo.Context) error {
 	DbConnection, _ := sql.Open("sqlite3", dbName)
 	defer DbConnection.Close()
 
-	cmd := "SELECT name, content, tags FROM posts"
+	cmd := "SELECT name,category, content, tags FROM posts"
 	rows, err := DbConnection.Query(cmd)
 	if err != nil {
 		log.Fatal(err)
@@ -66,7 +68,7 @@ func showPosts(c echo.Context) error {
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.Name, &post.Content, &post.Tags)
+		err := rows.Scan(&post.Name,&post.Category, &post.Content, &post.Tags)
 		if err != nil {
 			log.Fatal(err)
 		}
