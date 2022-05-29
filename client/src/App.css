@@ -13,16 +13,26 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+header {
+  background-color: red;
+  position: relative;
+  margin-bottom: 2em;
+  font-style: italic;
+  text-shadow: -4px 3px 0 #fa4141, -8px 6px 0 #000;
+
+  letter-spacing: .1em;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  min-height: 50svh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 2vmin);
   color: white;
 }
+
+
 
 .App-link {
   color: #61dafb;
