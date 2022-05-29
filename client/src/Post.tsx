@@ -9,7 +9,11 @@ const initialState = {
 
 const server = process.env.API_URL || 'http://localhost:9000';
 
-export function Post() {
+type Props = {
+  onPostCompleted: () => void;
+};
+
+export const Post: React.FC<Props> = ({ onPostCompleted }) => {
   const [values, setValues] = useState(initialState);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +38,7 @@ export function Post() {
         console.log('POST success:', data);
         setValues({ ...values, name: '' });
         console.log(values);
+        onPostCompleted();
       })
       .catch((error) => {
         console.error('POST error:', error);
@@ -72,4 +77,4 @@ export function Post() {
       </form>
     </div>
   );
-}
+};

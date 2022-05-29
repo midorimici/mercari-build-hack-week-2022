@@ -11,7 +11,12 @@ interface Item {
 
 const server = process.env.API_URL || 'http://localhost:9000';
 
-export function PostList() {
+type Props = {
+  shouldReload: boolean;
+  onListCompleted: () => void;
+};
+
+export const PostList: React.FC<Props> = ({ shouldReload, onListCompleted }) => {
   const [items, setItems] = useState<Item[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -28,6 +33,7 @@ export function PostList() {
       .then((data) => {
         console.log('GET success:', data);
         setItems(data);
+        onListCompleted();
       })
       .catch((error) => {
         console.error('GET error:', error);
@@ -35,8 +41,10 @@ export function PostList() {
   };
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    if (shouldReload) {
+      fetchItems();
+    }
+  }, [shouldReload]);
 
   const postlist = (
     <div>
@@ -64,4 +72,4 @@ export function PostList() {
       <ReplyDialog isVisible={visible} setIsVisible={setVisible} />
     </div>
   );
-}
+};
