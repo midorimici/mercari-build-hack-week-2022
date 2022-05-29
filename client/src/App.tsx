@@ -1,20 +1,28 @@
-import { useState } from 'react';
-import './App.css';
-import { Post } from './Post';
-import { PostList } from './PostList';
+import { useState } from "react";
+import "./App.css";
+import { Post } from "./Post";
+import { PostList } from "./PostList";
+import { NavBar } from "./NavBar";
 
 function App() {
-  const [shouldReload, setShouldReload] = useState(true);
+	const [shouldReload, setShouldReload] = useState(true);
 
-  return (
-    <div className="App">
-      <h1> タイムライン</h1>
-      <div>
-        <Post onPostCompleted={() => setShouldReload(true)} />
-        <PostList shouldReload={shouldReload} onListCompleted={() => setShouldReload(false)} />
-      </div>
-    </div>
-  );
+	return (
+		<div className="App">
+			<div className="Header">
+				<p className="Logo">Mercari</p>
+				<p> タイムライン</p>
+			</div>
+			<NavBar />
+			<div>
+				<Post onPostCompleted={() => setShouldReload(true)} />
+				<PostList
+					shouldReload={shouldReload}
+					onListCompleted={() => setShouldReload(false)}
+				/>
+			</div>
+		</div>
+	);
 }
 
 export default App;
