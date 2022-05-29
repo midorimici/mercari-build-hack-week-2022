@@ -10,7 +10,7 @@ function App() {
 	return (
 		<div className="App">
 			<div className="Header">
-				<p className="Logo">Mercari</p>
+				<p className="Logo">MerMatch</p>
 				<p> タイムライン</p>
 			</div>
 			<NavBar />
