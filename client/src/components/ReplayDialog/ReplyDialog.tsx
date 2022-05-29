@@ -48,6 +48,7 @@ export const ReplyDialog: React.FC<Props> = ({ isVisible, setIsVisible }) => {
           <button type="submit">投稿する</button>
         </form>
       </div>
+      <div className="backdrop" onClick={() => setIsVisible(false)} />
     </div>
   );
 };
