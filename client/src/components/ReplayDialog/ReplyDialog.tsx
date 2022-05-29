@@ -46,6 +46,7 @@ export const ReplyDialog: React.FC<Props> = ({ isVisible, setIsVisible }) => {
             maxLength={200}
           />
           <button type="submit">投稿する</button>
+          <button onClick={() => setIsVisible(false)}>閉じる</button>
         </form>
       </div>
       <div className="backdrop" onClick={() => setIsVisible(false)} />
