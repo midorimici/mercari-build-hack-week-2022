@@ -61,7 +61,7 @@ export function PostList() {
   return (
     <div>
       {postlist}
-      <ReplyDialog isVisible={visible} />
+      <ReplyDialog isVisible={visible} setIsVisible={setVisible} />
     </div>
   );
 }
