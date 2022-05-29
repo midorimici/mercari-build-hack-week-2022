@@ -1,0 +1,19 @@
+.ItemList{
+    border: 1px solid;
+    border-radius: 20px;
+    margin: 20px;
+    padding: 20px;
+}
+
+.Info{
+    display: flex;
+}
+
+.Box{
+    margin: 10px;
+}
+
+.Container{
+    display: flex;
+    justify-content: space-between;
+}
