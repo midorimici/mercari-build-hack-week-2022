@@ -1,0 +1,15 @@
+.NavContainer {
+	display: flex;
+	justify-content: space-around;
+}
+
+.NavItem {
+	width: 200px;
+	margin: 20px;
+	border-bottom: solid 1px gray;
+}
+
+.NavItem:hover {
+	transition: 0.3s;
+	opacity: 0.5;
+}
